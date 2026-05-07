@@ -1,0 +1,22 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+*.egg-info/
+
+# Vagrant
+.vagrant/
+
+# Secrets
+.env
+*.key
+
+# RAG index
+rag/index.faiss
+rag/chunks.json
+
+# OS
+.DS_Store
+
+# IDE
+.vscode/settings.json
