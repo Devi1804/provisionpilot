@@ -1,0 +1,16 @@
+[project]
+name = "provisionpilot"
+version = "0.1.0"
+description = "Conversational VM provisioning agent."
+requires-python = ">=3.11"
+dynamic = ["dependencies"]
+
+[project.scripts]
+provisionpilot = "cli.main:app"
+
+[tool.setuptools.dynamic]
+dependencies = {file = ["requirements.txt"]}
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["agent*", "cli*", "rag*"]
