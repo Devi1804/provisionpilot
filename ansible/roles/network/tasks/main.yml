@@ -1,0 +1,49 @@
+---
+- name: Load bonding kernel module
+  modprobe:
+    name: bonding
+    state: present
+  become: true
+
+- name: Load dummy kernel module
+  modprobe:
+    name: dummy
+    state: present
+  become: true
+
+- name: Persist module loads
+  copy:
+    content: |
+      bonding
+      dummy
+    dest: /etc/modules-load.d/provisionpilot.conf
+  become: true
+
+- name: Create two dummy interfaces for bond members
+  command: "ip link add {{ item }} type dummy"
+  args:
+    creates: "/sys/class/net/{{ item }}"
+  loop:
+    - dummy0
+    - dummy1
+  become: true
+
+- name: Bring dummy interfaces up
+  command: "ip link set {{ item }} up"
+  loop:
+    - dummy0
+    - dummy1
+  become: true
+
+- name: Render bond netplan config
+  template:
+    src: bond.yaml.j2
+    dest: /etc/netplan/60-bond.yaml
+    mode: "0600"
+  become: true
+  notify: apply netplan
+
+- name: Set hostname
+  hostname:
+    name: "{{ inventory_hostname }}"
+  become: true

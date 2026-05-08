@@ -1,0 +1,9 @@
+---
+- name: Configure all VMs
+  hosts: all
+  gather_facts: true
+  vars:
+    bond_ip: "10.99.99.{{ 10 + (groups['all'].index(inventory_hostname) | int) }}"
+  roles:
+    - base
+    - network

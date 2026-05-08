@@ -1,0 +1,30 @@
+---
+- name: Update apt cache
+  apt:
+    update_cache: yes
+    cache_valid_time: 3600
+  become: true
+
+- name: Install common packages
+  apt:
+    name:
+      - htop
+      - jq
+      - curl
+      - net-tools
+      - ifenslave  # for NIC bonding
+    state: present
+  become: true
+
+- name: Set timezone
+  timezone:
+    name: America/Chicago
+  become: true
+
+- name: Harden SSH config
+  lineinfile:
+    path: /etc/ssh/sshd_config
+    regexp: "^#?PermitRootLogin"
+    line: "PermitRootLogin no"
+  become: true
+  notify: restart ssh

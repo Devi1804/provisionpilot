@@ -1,0 +1,14 @@
+network:
+  version: 2
+  ethernets:
+    dummy0:
+      dhcp4: no
+    dummy1:
+      dhcp4: no
+  bonds:
+    bond0:
+      interfaces: [dummy0, dummy1]
+      addresses: [{{ bond_ip }}/24]
+      parameters:
+        mode: active-backup
+        mii-monitor-interval: 100
